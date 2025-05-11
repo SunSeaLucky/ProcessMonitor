@@ -39,7 +39,11 @@ def add_exclude_list(missing_list):
         
 
 def send_alert(missing):  
+    detail_server_information = subprocess.check_output(["uname", "-a"]).decode("utf-8")
+    time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     body = "检测到以下关键进程未在服务器上运行，请及时查看：\n\n" + "\n".join(missing)  
+    body += "\n\n服务器信息：\n\n" + detail_server_information
+    body += "\n\n当前时间：\n\n" + time_str
     mail.send_email(
         "⚠️  进程意外终止警告", 
         body, 
